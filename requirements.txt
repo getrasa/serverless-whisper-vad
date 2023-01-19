@@ -1,0 +1,9 @@
+sanic==22.6.2
+transformers
+accelerate
+ffmpeg-python==0.2.0
+gradio==3.13.0
+yt-dlp
+torchaudio
+altair
+git+https://github.com/openai/whisper.git 
