@@ -1,14 +1,14 @@
+from whisper_vad.src.segments import merge_timestamps
 import sys
 import unittest
 
 sys.path.append('../whisper-webui')
 
-from src.segments import merge_timestamps
 
 class TestSegments(unittest.TestCase):
     def __init__(self, *args, **kwargs):
         super(TestSegments, self).__init__(*args, **kwargs)
-        
+
     def test_merge_segments(self):
         segments = [
             {'start': 10.0, 'end': 20.0},
@@ -21,7 +21,8 @@ class TestSegments(unittest.TestCase):
             {'start': 110.0, 'end': 112.0}
         ]
 
-        result = merge_timestamps(segments, merge_window=5, max_merge_size=30, padding_left=1, padding_right=1)
+        result = merge_timestamps(
+            segments, merge_window=5, max_merge_size=30, padding_left=1, padding_right=1)
 
         self.assertListEqual(result, [
             {'start': 9.0, 'end': 36.0},
@@ -37,12 +38,14 @@ class TestSegments(unittest.TestCase):
             {'start': 39.986, 'end': 40.814}
         ]
 
-        result = merge_timestamps(segments, merge_window=5, max_merge_size=30, padding_left=1, padding_right=1)
+        result = merge_timestamps(
+            segments, merge_window=5, max_merge_size=30, padding_left=1, padding_right=1)
 
         self.assertListEqual(result, [
             {'start': 4.0, 'end': 39.584},
             {'start': 39.584, 'end': 41.814}
         ])
+
 
 if __name__ == '__main__':
     unittest.main()

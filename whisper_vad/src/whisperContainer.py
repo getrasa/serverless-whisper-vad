@@ -2,7 +2,8 @@
 import os
 import whisper
 
-from src.modelCache import GLOBAL_MODEL_CACHE, ModelCache
+from whisper_vad.src.modelCache import GLOBAL_MODEL_CACHE, ModelCache
+
 
 class WhisperContainer:
     def __init__(self, model_name: str, device: str = None, download_root: str = None, cache: ModelCache = None):
@@ -13,14 +14,15 @@ class WhisperContainer:
 
         # Will be created on demand
         self.model = None
-    
+
     def get_model(self):
         if self.model is None:
 
             if (self.cache is None):
                 self.model = self._create_model()
             else:
-                model_key = "WhisperContainer." + self.model_name + ":" + (self.device if self.device else '')
+                model_key = "WhisperContainer." + self.model_name + \
+                    ":" + (self.device if self.device else '')
                 self.model = self.cache.get(model_key, self._create_model)
         return self.model
 
@@ -34,10 +36,12 @@ class WhisperContainer:
             root_dir = self.download_root
 
             if root_dir is None:
-                root_dir = os.path.join(os.path.expanduser("~"), ".cache", "whisper")
+                root_dir = os.path.join(
+                    os.path.expanduser("~"), ".cache", "whisper")
 
             if self.model_name in whisper._MODELS:
-                whisper._download(whisper._MODELS[self.model_name], root_dir, False)
+                whisper._download(
+                    whisper._MODELS[self.model_name], root_dir, False)
             return True
         except Exception as e:
             # Given that the API is private, it could change at any time. We don't want to crash the program
@@ -71,7 +75,7 @@ class WhisperContainer:
 
     # This is required for multiprocessing
     def __getstate__(self):
-        return { "model_name": self.model_name, "device": self.device, "download_root": self.download_root }
+        return {"model_name": self.model_name, "device": self.device, "download_root": self.download_root}
 
     def __setstate__(self, state):
         self.model_name = state["model_name"]
@@ -89,7 +93,7 @@ class WhisperCallback:
         self.task = task
         self.initial_prompt = initial_prompt
         self.decodeOptions = decodeOptions
-        
+
     def invoke(self, audio, segment_index: int, prompt: str, detected_language: str):
         """
         Peform the transcription of the given audio file or data.
@@ -113,10 +117,11 @@ class WhisperCallback:
         """
         model = self.model_container.get_model()
 
-        return model.transcribe(audio, \
-                 language=self.language if self.language else detected_language, task=self.task, \
-                 initial_prompt=self._concat_prompt(self.initial_prompt, prompt) if segment_index == 0 else prompt, \
-                 **self.decodeOptions)
+        return model.transcribe(audio,
+                                language=self.language if self.language else detected_language, task=self.task,
+                                initial_prompt=self._concat_prompt(
+                                    self.initial_prompt, prompt) if segment_index == 0 else prompt,
+                                **self.decodeOptions)
 
     def _concat_prompt(self, prompt1, prompt2):
         if (prompt1 is None):

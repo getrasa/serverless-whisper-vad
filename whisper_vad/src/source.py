@@ -1,4 +1,4 @@
-# Gradio seems to truncate files without keeping the extension, so we need to truncate the file prefix ourself 
+# Gradio seems to truncate files without keeping the extension, so we need to truncate the file prefix ourself
 import os
 import pathlib
 from typing import List
@@ -7,12 +7,13 @@ import zipfile
 import ffmpeg
 from more_itertools import unzip
 
-from src.download import ExceededMaximumDuration, download_url
+from whisper_vad.src.download import ExceededMaximumDuration, download_url
 
 MAX_FILE_PREFIX_LENGTH = 17
 
+
 class AudioSource:
-    def __init__(self, source_path, source_name = None):
+    def __init__(self, source_path, source_name=None):
         self.source_path = source_path
         self.source_name = source_name
 
@@ -33,6 +34,7 @@ class AudioSource:
     def __str__(self) -> str:
         return self.source_path
 
+
 class AudioSourceCollection:
     def __init__(self, sources: List[AudioSource]):
         self.sources = sources
@@ -40,16 +42,18 @@ class AudioSourceCollection:
     def __iter__(self):
         return iter(self.sources)
 
+
 def get_audio_source_collection(urlData: str, multipleFiles: List, microphoneData: str, input_audio_max_duration: float = -1) -> List[AudioSource]:
     output: List[AudioSource] = []
 
     if urlData:
         # Download from YouTube. This could also be a playlist or a channel.
-        output.extend([ AudioSource(x) for x in download_url(urlData, input_audio_max_duration, playlistItems=None) ])
+        output.extend([AudioSource(x) for x in download_url(
+            urlData, input_audio_max_duration, playlistItems=None)])
     else:
         # Add input files
         if (multipleFiles is not None):
-            output.extend([ AudioSource(x.name) for x in multipleFiles ])
+            output.extend([AudioSource(x.name) for x in multipleFiles])
         if (microphoneData is not None):
             output.append(AudioSource(microphoneData))
 
@@ -58,13 +62,15 @@ def get_audio_source_collection(urlData: str, multipleFiles: List, microphoneDat
         # Calculate total audio length. We do this even if input_audio_max_duration
         # is disabled to ensure that all the audio files are valid.
         for source in output:
-            audioDuration = ffmpeg.probe(source.source_path)["format"]["duration"]
+            audioDuration = ffmpeg.probe(source.source_path)[
+                "format"]["duration"]
             total_duration += float(audioDuration)
 
         # Ensure the total duration of the audio is not too long
         if input_audio_max_duration > 0:
             if float(total_duration) > input_audio_max_duration:
-                raise ExceededMaximumDuration(videoDuration=total_duration, maxDuration=input_audio_max_duration, message="Video(s) is too long")
-                
+                raise ExceededMaximumDuration(
+                    videoDuration=total_duration, maxDuration=input_audio_max_duration, message="Video(s) is too long")
+
     # Return a list of audio sources
     return output
