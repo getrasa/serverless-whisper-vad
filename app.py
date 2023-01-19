@@ -49,16 +49,15 @@ def inference(model_inputs: dict) -> dict:
     # Return the results as a dictionary
     return output
 
+# def main():
+#     print("Started")
+#     transcriber = app.WhisperTranscriber("medium")
+#     audio = AudioFile("./input.opus")
+#     result = transcriber.transcribe_webui_simple(
+#         "Japanese", None, [audio], None, "transcribe", "silero-vad", 5, 30, 1, 3)
 
-def main():
-    print("Started")
-    transcriber = app.WhisperTranscriber("medium")
-    audio = AudioFile("./input.opus")
-    result = transcriber.transcribe_webui_simple(
-        "Japanese", None, [audio], None, "transcribe", "silero-vad", 5, 30, 1, 3)
-
-    download, text, vtt = result
-    print(text)
+#     download, text, vtt = result
+#     print(text)
 
 
-main()
+# main()
