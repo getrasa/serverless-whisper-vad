@@ -5,10 +5,12 @@
 
 import whisper
 import torch
+import whisper_vad.app as app
 
 
 def download_model():
-    model = whisper.load_model("medium")
+    transcriber = app.WhisperTranscriber("medium")
+    # model = whisper.load_model("medium")
 
 
 if __name__ == "__main__":
