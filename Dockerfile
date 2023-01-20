@@ -21,6 +21,7 @@ RUN python3 download.py
 
 
 # Add your custom app code, init() and inference()
+ADD whisper_vad .
 ADD app.py .
 
 EXPOSE 8000
