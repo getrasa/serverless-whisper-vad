@@ -13,6 +13,7 @@ class WhisperContainer:
         self.cache = cache
 
         # Will be created on demand
+        self.model = None
         self.model = self.get_model()
 
     def get_model(self):
