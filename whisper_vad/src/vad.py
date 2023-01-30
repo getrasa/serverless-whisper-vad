@@ -465,7 +465,7 @@ class VadSileroTranscription(AbstractTranscription):
                                  VAD_MAX_PROCESSING_CHUNK)
 
             # print("Processing VAD in chunk from {} to {}".format(format_timestamp(
-                chunk_start), format_timestamp(chunk_start + chunk_duration)))
+                # chunk_start), format_timestamp(chunk_start + chunk_duration)))
             wav = self.get_audio_segment(
                 audio, str(chunk_start), str(chunk_duration))
 
