@@ -116,7 +116,7 @@ class AbstractTranscription(ABC):
         Parameters
         ----------
         audio: str
-            The audio file. 
+            The audio file.
         config: TranscriptionConfig
             The transcription configuration.
 
@@ -141,7 +141,7 @@ class AbstractTranscription(ABC):
                 raise Exception("Unknown non-speech strategy: " +
                                 str(config.non_speech_strategy))
 
-            print("Transcribing non-speech:")
+            # print("Transcribing non-speech:")
             pprint(merged)
         return merged
 
@@ -172,7 +172,7 @@ class AbstractTranscription(ABC):
         # A deque of transcribed segments that is passed to the next segment as a prompt
         prompt_window = deque()
 
-        print("Processing timestamps:")
+        # print("Processing timestamps:")
         pprint(merged)
 
         result = {
@@ -209,8 +209,8 @@ class AbstractTranscription(ABC):
             detected_language = languageCounter.most_common(
                 1)[0][0] if len(languageCounter) > 0 else None
 
-            print("Running whisper from ", format_timestamp(segment_start), " to ", format_timestamp(segment_end), ", duration: ",
-                  segment_duration, "expanded: ", segment_expand_amount, "prompt: ", segment_prompt, "language: ", detected_language)
+            # print("Running whisper from ", format_timestamp(segment_start), " to ", format_timestamp(segment_end), ", duration: ",
+            #       segment_duration, "expanded: ", segment_expand_amount, "prompt: ", segment_prompt, "language: ", detected_language)
             segment_result = whisperCallable.invoke(
                 segment_audio, segment_index, segment_prompt, detected_language)
 
@@ -435,10 +435,10 @@ class VadSileroTranscription(AbstractTranscription):
             model_key = "VadSileroTranscription"
             self.model, self.get_speech_timestamps = self.cache.get(
                 model_key, self._create_model)
-            print("Loaded Silerio model from cache.")
+            # print("Loaded Silerio model from cache.")
         else:
             self.model, self.get_speech_timestamps = self._create_model()
-            print("Created Silerio model")
+            # print("Created Silerio model")
 
     def _create_model(self):
         model, utils = torch.hub.load(
@@ -453,8 +453,8 @@ class VadSileroTranscription(AbstractTranscription):
     def get_transcribe_timestamps(self, audio: str, config: TranscriptionConfig, start_time: float, end_time: float):
         result = []
 
-        print("Getting timestamps from audio file: {}, start: {}, duration: {}".format(
-            audio, start_time, end_time))
+        # print("Getting timestamps from audio file: {}, start: {}, duration: {}".format(
+        #     audio, start_time, end_time))
         perf_start_time = time.perf_counter()
 
         # Divide procesisng of audio into chunks
@@ -464,7 +464,7 @@ class VadSileroTranscription(AbstractTranscription):
             chunk_duration = min(end_time - chunk_start,
                                  VAD_MAX_PROCESSING_CHUNK)
 
-            print("Processing VAD in chunk from {} to {}".format(format_timestamp(
+            # print("Processing VAD in chunk from {} to {}".format(format_timestamp(
                 chunk_start), format_timestamp(chunk_start + chunk_duration)))
             wav = self.get_audio_segment(
                 audio, str(chunk_start), str(chunk_duration))
@@ -482,8 +482,8 @@ class VadSileroTranscription(AbstractTranscription):
             chunk_start += chunk_duration
 
         perf_end_time = time.perf_counter()
-        print("VAD processing took {} seconds".format(
-            perf_end_time - perf_start_time))
+        # print("VAD processing took {} seconds".format(
+        #     perf_end_time - perf_start_time))
 
         return result
 
