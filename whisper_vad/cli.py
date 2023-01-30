@@ -109,7 +109,7 @@ def cli():
     vad_cpu_cores = args.pop("vad_cpu_cores")
     auto_parallel = args.pop("auto_parallel")
 
-    model = WhisperContainer(model_name, device=device,
+    w_model = WhisperContainer(model_name, device=device,
                              download_root=model_dir)
     transcriber = WhisperTranscriber(
         delete_uploaded_files=False, vad_cpu_cores=vad_cpu_cores)
@@ -136,7 +136,7 @@ def cli():
             source_path = source["path"]
             source_name = source["name"]
 
-            result = transcriber.transcribe_file(model, source_path, temperature=temperature,
+            result = transcriber.transcribe_file(w_model, source_path, temperature=temperature,
                                                  vad=vad, vadMergeWindow=vad_merge_window, vadMaxMergeSize=vad_max_merge_size,
                                                  vadPadding=vad_padding, vadPromptWindow=vad_prompt_window, **args)
 

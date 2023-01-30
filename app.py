@@ -16,10 +16,10 @@ class AudioFile:
 
 def init():
     # global model
-    global transcriber
+    global model
 
     # model = whisper.load_model("medium")
-    transcriber = app.WhisperTranscriber("medium")
+    model = app.WhisperTranscriber("medium")
 
 # Inference is ran for every server call
 # Reference your preloaded global model variable here.
@@ -39,7 +39,7 @@ def inference(model_inputs: dict) -> dict:
 
     # Run the model
     audio = AudioFile("input.mp3")
-    result = transcriber.transcribe_webui_simple(
+    result = model.transcribe_webui_simple(
         "Japanese", None, [audio], None, "transcribe", "silero-vad", 5, 30, 1, 3)
     download, text, vtt = result
     output = {"text": vtt}

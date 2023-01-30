@@ -122,8 +122,6 @@ class WhisperTranscriber:
             try:
                 selectedLanguage = languageName.lower() if len(languageName) > 0 else None
 
-                model = self.model
-
                 # Result
                 download = []
                 zip_file_lookup = {}
@@ -147,7 +145,7 @@ class WhisperTranscriber:
                         print("Transcribing ", source.source_path)
 
                     # Transcribe
-                    result = self.transcribe_file(model, source.source_path, selectedLanguage, task, vad,
+                    result = self.transcribe_file(self.model, source.source_path, selectedLanguage, task, vad,
                                                   vadMergeWindow, vadMaxMergeSize, vadPadding, vadPromptWindow, **decodeOptions)
                     filePrefix = slugify(
                         source_prefix + source.get_short_name(), allow_unicode=True)

@@ -116,9 +116,9 @@ class WhisperCallback:
         -------
         The result of the Whisper call.
         """
-        model = self.model_container.get_model()
+        w_model = self.model_container.get_model()
 
-        return model.transcribe(audio,
+        return w_model.transcribe(audio,
                                 language=self.language if self.language else detected_language, task=self.task,
                                 initial_prompt=self._concat_prompt(
                                     self.initial_prompt, prompt) if segment_index == 0 else prompt,

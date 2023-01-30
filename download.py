@@ -9,7 +9,7 @@ import whisper_vad.app as app
 
 
 def download_model():
-    transcriber = app.WhisperTranscriber("medium")
+    model = app.WhisperTranscriber("medium")
     # model = whisper.load_model("medium")
 
 
