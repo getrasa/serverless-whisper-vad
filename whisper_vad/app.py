@@ -27,7 +27,7 @@ from whisper_vad.src.vad import AbstractTranscription, NonSpeechStrategy, Period
 from whisper_vad.src.whisperContainer import WhisperContainer
 
 # Limitations (set to -1 to disable)
-DEFAULT_INPUT_AUDIO_MAX_DURATION = 600  # seconds
+DEFAULT_INPUT_AUDIO_MAX_DURATION = 7200  # seconds
 
 # Whether or not to automatically delete all uploaded files, to save disk space
 DELETE_UPLOADED_FILES = True
